@@ -1,0 +1,4 @@
+{
+  "comment": "Declared size of the frontend oracle. verify.py uses this as the denominator before the suite can even be collected, and flags a mismatch once it can - which is how a deleted test shows up as tampering instead of as a smaller, easier exam.",
+  "tests": 12
+}

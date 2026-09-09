@@ -1,0 +1,13 @@
+# build output
+backend/target/
+frontend/dist/
+frontend/node_modules/
+frontend/.vitest-result.json
+
+# loop output
+.ralph/logs/
+
+# editors
+.idea/
+.vscode/
+*.iml

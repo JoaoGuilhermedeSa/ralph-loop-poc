@@ -1,0 +1,28 @@
+# Dev database. Optional: the acceptance suite runs on in-memory H2.
+#
+#   docker compose -f db/docker-compose.yml up -d
+#
+# NOTE: this path has not been run yet - Docker was unavailable when the
+# project was set up. See "Discovered work" in fix_plan.md.
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: charcreate-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: charcreate
+      MYSQL_USER: charcreate
+      MYSQL_PASSWORD: charcreate
+    ports:
+      - "3306:3306"
+    volumes:
+      - charcreate-mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  charcreate-mysql:

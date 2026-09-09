@@ -1,0 +1,1273 @@
+[
+  {
+    "id": "create-none-male",
+    "request": {
+      "accountId": 1,
+      "name": "None Test",
+      "vocation": 0,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "None Test",
+        "vocation": 0,
+        "vocationName": "None",
+        "sex": 1,
+        "townId": 1,
+        "townName": "Thais",
+        "level": 1,
+        "experience": 0,
+        "health": 150,
+        "healthMax": 150,
+        "mana": 0,
+        "manaMax": 0,
+        "capacity": 400,
+        "lookType": 128,
+        "posX": 32369,
+        "posY": 32241,
+        "posZ": 7,
+        "lookHead": 78,
+        "lookBody": 68,
+        "lookLegs": 58,
+        "lookFeet": 76
+      }
+    }
+  },
+  {
+    "id": "create-sorcerer-male",
+    "request": {
+      "accountId": 1,
+      "name": "Sorcerer Test",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "Sorcerer Test",
+        "vocation": 1,
+        "vocationName": "Sorcerer",
+        "sex": 1,
+        "townId": 1,
+        "townName": "Thais",
+        "level": 8,
+        "experience": 4200,
+        "health": 185,
+        "healthMax": 185,
+        "mana": 210,
+        "manaMax": 210,
+        "capacity": 470,
+        "lookType": 130,
+        "posX": 32369,
+        "posY": 32241,
+        "posZ": 7,
+        "lookHead": 78,
+        "lookBody": 68,
+        "lookLegs": 58,
+        "lookFeet": 76
+      }
+    }
+  },
+  {
+    "id": "create-druid-male",
+    "request": {
+      "accountId": 1,
+      "name": "Druid Test",
+      "vocation": 2,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "Druid Test",
+        "vocation": 2,
+        "vocationName": "Druid",
+        "sex": 1,
+        "townId": 1,
+        "townName": "Thais",
+        "level": 8,
+        "experience": 4200,
+        "health": 185,
+        "healthMax": 185,
+        "mana": 210,
+        "manaMax": 210,
+        "capacity": 470,
+        "lookType": 130,
+        "posX": 32369,
+        "posY": 32241,
+        "posZ": 7,
+        "lookHead": 78,
+        "lookBody": 68,
+        "lookLegs": 58,
+        "lookFeet": 76
+      }
+    }
+  },
+  {
+    "id": "create-paladin-male",
+    "request": {
+      "accountId": 1,
+      "name": "Paladin Test",
+      "vocation": 3,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "Paladin Test",
+        "vocation": 3,
+        "vocationName": "Paladin",
+        "sex": 1,
+        "townId": 1,
+        "townName": "Thais",
+        "level": 8,
+        "experience": 4200,
+        "health": 220,
+        "healthMax": 220,
+        "mana": 105,
+        "manaMax": 105,
+        "capacity": 540,
+        "lookType": 129,
+        "posX": 32369,
+        "posY": 32241,
+        "posZ": 7,
+        "lookHead": 78,
+        "lookBody": 68,
+        "lookLegs": 58,
+        "lookFeet": 76
+      }
+    }
+  },
+  {
+    "id": "create-knight-male",
+    "request": {
+      "accountId": 1,
+      "name": "Knight Test",
+      "vocation": 4,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "Knight Test",
+        "vocation": 4,
+        "vocationName": "Knight",
+        "sex": 1,
+        "townId": 1,
+        "townName": "Thais",
+        "level": 8,
+        "experience": 4200,
+        "health": 255,
+        "healthMax": 255,
+        "mana": 35,
+        "manaMax": 35,
+        "capacity": 575,
+        "lookType": 131,
+        "posX": 32369,
+        "posY": 32241,
+        "posZ": 7,
+        "lookHead": 78,
+        "lookBody": 68,
+        "lookLegs": 58,
+        "lookFeet": 76
+      }
+    }
+  },
+  {
+    "id": "outfit-none-female",
+    "request": {
+      "accountId": 1,
+      "name": "None Lady",
+      "vocation": 0,
+      "sex": 0,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "lookType": 136,
+        "sex": 0,
+        "lookHead": 78,
+        "lookBody": 68,
+        "lookLegs": 58,
+        "lookFeet": 76
+      }
+    }
+  },
+  {
+    "id": "outfit-sorcerer-female",
+    "request": {
+      "accountId": 1,
+      "name": "Sorcerer Lady",
+      "vocation": 1,
+      "sex": 0,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "lookType": 138,
+        "sex": 0,
+        "lookHead": 78,
+        "lookBody": 68,
+        "lookLegs": 58,
+        "lookFeet": 76
+      }
+    }
+  },
+  {
+    "id": "outfit-druid-female",
+    "request": {
+      "accountId": 1,
+      "name": "Druid Lady",
+      "vocation": 2,
+      "sex": 0,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "lookType": 138,
+        "sex": 0,
+        "lookHead": 78,
+        "lookBody": 68,
+        "lookLegs": 58,
+        "lookFeet": 76
+      }
+    }
+  },
+  {
+    "id": "outfit-paladin-female",
+    "request": {
+      "accountId": 1,
+      "name": "Paladin Lady",
+      "vocation": 3,
+      "sex": 0,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "lookType": 137,
+        "sex": 0,
+        "lookHead": 78,
+        "lookBody": 68,
+        "lookLegs": 58,
+        "lookFeet": 76
+      }
+    }
+  },
+  {
+    "id": "outfit-knight-female",
+    "request": {
+      "accountId": 1,
+      "name": "Knight Lady",
+      "vocation": 4,
+      "sex": 0,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "lookType": 139,
+        "sex": 0,
+        "lookHead": 78,
+        "lookBody": 68,
+        "lookLegs": 58,
+        "lookFeet": 76
+      }
+    }
+  },
+  {
+    "id": "spawn-town-1",
+    "request": {
+      "accountId": 1,
+      "name": "Pilgrim One",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "townId": 1,
+        "townName": "Thais",
+        "posX": 32369,
+        "posY": 32241,
+        "posZ": 7
+      }
+    }
+  },
+  {
+    "id": "spawn-town-2",
+    "request": {
+      "accountId": 1,
+      "name": "Pilgrim Two",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 2
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "townId": 2,
+        "townName": "Carlin",
+        "posX": 32360,
+        "posY": 31782,
+        "posZ": 7
+      }
+    }
+  },
+  {
+    "id": "spawn-town-3",
+    "request": {
+      "accountId": 1,
+      "name": "Pilgrim Three",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 3
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "townId": 3,
+        "townName": "Venore",
+        "posX": 32957,
+        "posY": 32076,
+        "posZ": 7
+      }
+    }
+  },
+  {
+    "id": "spawn-town-4",
+    "request": {
+      "accountId": 1,
+      "name": "Pilgrim Four",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 4
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "townId": 4,
+        "townName": "Ab'Dendriel",
+        "posX": 32732,
+        "posY": 31634,
+        "posZ": 7
+      }
+    }
+  },
+  {
+    "id": "spawn-town-5",
+    "request": {
+      "accountId": 1,
+      "name": "Pilgrim Five",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 5
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "townId": 5,
+        "townName": "Kazordoon",
+        "posX": 32649,
+        "posY": 31925,
+        "posZ": 11
+      }
+    }
+  },
+  {
+    "id": "spawn-town-6",
+    "request": {
+      "accountId": 1,
+      "name": "Pilgrim Six",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 6
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "townId": 6,
+        "townName": "Rookgaard",
+        "posX": 32097,
+        "posY": 32219,
+        "posZ": 7
+      }
+    }
+  },
+  {
+    "id": "name-trimmed",
+    "request": {
+      "accountId": 1,
+      "name": "  Padded Name  ",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "Padded Name"
+      }
+    }
+  },
+  {
+    "id": "name-spaces-collapsed",
+    "request": {
+      "accountId": 1,
+      "name": "Wide    Gap",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "Wide Gap"
+      }
+    }
+  },
+  {
+    "id": "name-case-preserved",
+    "request": {
+      "accountId": 1,
+      "name": "eLiTe kNiGhT",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "eLiTe kNiGhT"
+      }
+    }
+  },
+  {
+    "id": "name-too-short",
+    "request": {
+      "accountId": 1,
+      "name": "Ab",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_TOO_SHORT",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-too-short-after-trim",
+    "request": {
+      "accountId": 1,
+      "name": "  Ab  ",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_TOO_SHORT",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-too-long",
+    "request": {
+      "accountId": 1,
+      "name": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_TOO_LONG",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-max-length-ok",
+    "request": {
+      "accountId": 1,
+      "name": "Abbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "Abbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    }
+  },
+  {
+    "id": "name-digits",
+    "request": {
+      "accountId": 1,
+      "name": "Player 1",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_INVALID_CHARACTERS",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-punctuation",
+    "request": {
+      "accountId": 1,
+      "name": "O'Brien",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_INVALID_CHARACTERS",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-plain-ascii-ok",
+    "request": {
+      "accountId": 1,
+      "name": "Josue Ferrao",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "Josue Ferrao"
+      }
+    }
+  },
+  {
+    "id": "name-non-ascii",
+    "request": {
+      "accountId": 1,
+      "name": "Josu\u00e9",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_INVALID_CHARACTERS",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-five-words",
+    "request": {
+      "accountId": 1,
+      "name": "One Two Three Four Five",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_TOO_MANY_WORDS",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-four-words-ok",
+    "request": {
+      "accountId": 1,
+      "name": "One Two Three Four",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "One Two Three Four"
+      }
+    }
+  },
+  {
+    "id": "name-single-letter-word",
+    "request": {
+      "accountId": 1,
+      "name": "Bob X Smith",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_WORD_TOO_SHORT",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-reserved-god",
+    "request": {
+      "accountId": 1,
+      "name": "God Slayer",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_RESERVED_WORD",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-reserved-substring",
+    "request": {
+      "accountId": 1,
+      "name": "Godfrey Bold",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_RESERVED_WORD",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-reserved-spaced",
+    "request": {
+      "accountId": 1,
+      "name": "Go dly",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_RESERVED_WORD",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-order-word-beats-reserved",
+    "request": {
+      "accountId": 1,
+      "name": "G o d",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_WORD_TOO_SHORT",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-reserved-admin",
+    "request": {
+      "accountId": 1,
+      "name": "Admin Helper",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_RESERVED_WORD",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-gm-substring-allowed",
+    "request": {
+      "accountId": 1,
+      "name": "Sigmund",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "Sigmund"
+      }
+    }
+  },
+  {
+    "id": "name-reserved-owner-substring",
+    "request": {
+      "accountId": 1,
+      "name": "Towner One",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_RESERVED_WORD",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "name-order-short-beats-chars",
+    "request": {
+      "accountId": 1,
+      "name": "A1",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "NAME_TOO_SHORT",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "required-accountId",
+    "request": {
+      "name": "Bubble",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "FIELD_REQUIRED",
+        "field": "accountId"
+      }
+    }
+  },
+  {
+    "id": "required-name",
+    "request": {
+      "accountId": 1,
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "FIELD_REQUIRED",
+        "field": "name"
+      }
+    }
+  },
+  {
+    "id": "required-vocation",
+    "request": {
+      "accountId": 1,
+      "name": "Bubble",
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "FIELD_REQUIRED",
+        "field": "vocation"
+      }
+    }
+  },
+  {
+    "id": "required-sex",
+    "request": {
+      "accountId": 1,
+      "name": "Bubble",
+      "vocation": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "FIELD_REQUIRED",
+        "field": "sex"
+      }
+    }
+  },
+  {
+    "id": "required-townId",
+    "request": {
+      "accountId": 1,
+      "name": "Bubble",
+      "vocation": 1,
+      "sex": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "FIELD_REQUIRED",
+        "field": "townId"
+      }
+    }
+  },
+  {
+    "id": "vocation-too-high",
+    "request": {
+      "accountId": 1,
+      "name": "Bubble",
+      "vocation": 5,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "INVALID_VOCATION",
+        "field": "vocation"
+      }
+    }
+  },
+  {
+    "id": "vocation-negative",
+    "request": {
+      "accountId": 1,
+      "name": "Bubble",
+      "vocation": -1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "INVALID_VOCATION",
+        "field": "vocation"
+      }
+    }
+  },
+  {
+    "id": "sex-invalid",
+    "request": {
+      "accountId": 1,
+      "name": "Bubble",
+      "vocation": 1,
+      "sex": 2,
+      "townId": 1
+    },
+    "expect": {
+      "status": 400,
+      "body": {
+        "error": "INVALID_SEX",
+        "field": "sex"
+      }
+    }
+  },
+  {
+    "id": "unknown-account",
+    "request": {
+      "accountId": 999,
+      "name": "Bubble",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 404,
+      "body": {
+        "error": "UNKNOWN_ACCOUNT",
+        "field": "accountId"
+      }
+    }
+  },
+  {
+    "id": "unknown-town",
+    "request": {
+      "accountId": 1,
+      "name": "Bubble",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 99
+    },
+    "expect": {
+      "status": 404,
+      "body": {
+        "error": "UNKNOWN_TOWN",
+        "field": "townId"
+      }
+    }
+  },
+  {
+    "id": "name-taken-exact",
+    "request": {
+      "accountId": 1,
+      "name": "Duplicate Hero",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 409,
+      "body": {
+        "error": "NAME_TAKEN",
+        "field": "name"
+      }
+    },
+    "given": [
+      {
+        "accountId": 1,
+        "name": "Duplicate Hero",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      }
+    ]
+  },
+  {
+    "id": "name-taken-different-case",
+    "request": {
+      "accountId": 1,
+      "name": "dUPLICATE hERO",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 409,
+      "body": {
+        "error": "NAME_TAKEN",
+        "field": "name"
+      }
+    },
+    "given": [
+      {
+        "accountId": 1,
+        "name": "Duplicate Hero",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      }
+    ]
+  },
+  {
+    "id": "name-taken-different-spacing",
+    "request": {
+      "accountId": 1,
+      "name": "Duplicate    Hero",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 409,
+      "body": {
+        "error": "NAME_TAKEN",
+        "field": "name"
+      }
+    },
+    "given": [
+      {
+        "accountId": 1,
+        "name": "Duplicate Hero",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      }
+    ]
+  },
+  {
+    "id": "different-name-ok",
+    "request": {
+      "accountId": 1,
+      "name": "Duplicate Heroes",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "Duplicate Heroes"
+      }
+    },
+    "given": [
+      {
+        "accountId": 1,
+        "name": "Duplicate Hero",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      }
+    ]
+  },
+  {
+    "id": "character-limit",
+    "request": {
+      "accountId": 1,
+      "name": "Eleventh Char",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 409,
+      "body": {
+        "error": "CHARACTER_LIMIT_REACHED"
+      }
+    },
+    "given": [
+      {
+        "accountId": 1,
+        "name": "Filler Chara",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Charb",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Charc",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Chard",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Chare",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Charf",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Charg",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Charh",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Chari",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Charj",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      }
+    ]
+  },
+  {
+    "id": "character-limit-boundary",
+    "request": {
+      "accountId": 1,
+      "name": "Tenth Char",
+      "vocation": 1,
+      "sex": 1,
+      "townId": 1
+    },
+    "expect": {
+      "status": 201,
+      "body": {
+        "name": "Tenth Char"
+      }
+    },
+    "given": [
+      {
+        "accountId": 1,
+        "name": "Filler Chara",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Charb",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Charc",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Chard",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Chare",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Charf",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Charg",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Charh",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      },
+      {
+        "accountId": 1,
+        "name": "Filler Chari",
+        "vocation": 1,
+        "sex": 1,
+        "townId": 1
+      }
+    ]
+  },
+  {
+    "id": "list-vocations",
+    "get": "/api/vocations",
+    "expect": {
+      "status": 200,
+      "json": [
+        {
+          "id": 0,
+          "name": "None"
+        },
+        {
+          "id": 1,
+          "name": "Sorcerer"
+        },
+        {
+          "id": 2,
+          "name": "Druid"
+        },
+        {
+          "id": 3,
+          "name": "Paladin"
+        },
+        {
+          "id": 4,
+          "name": "Knight"
+        }
+      ]
+    }
+  },
+  {
+    "id": "list-towns",
+    "get": "/api/towns",
+    "expect": {
+      "status": 200,
+      "json": [
+        {
+          "id": 1,
+          "name": "Thais"
+        },
+        {
+          "id": 2,
+          "name": "Carlin"
+        },
+        {
+          "id": 3,
+          "name": "Venore"
+        },
+        {
+          "id": 4,
+          "name": "Ab'Dendriel"
+        },
+        {
+          "id": 5,
+          "name": "Kazordoon"
+        },
+        {
+          "id": 6,
+          "name": "Rookgaard"
+        }
+      ]
+    }
+  }
+]
