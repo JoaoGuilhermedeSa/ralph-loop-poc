@@ -39,6 +39,8 @@ export default function App() {
   const [nameError, setNameError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<CreatedCharacter | null>(null);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [nameFieldInvalid, setNameFieldInvalid] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -71,6 +73,8 @@ export default function App() {
     setSex(1);
     setTownId(1);
     setNameError(null);
+    setServerError(null);
+    setNameFieldInvalid(false);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -98,11 +102,16 @@ export default function App() {
       });
       const body = await response.json();
       if (response.ok) {
+        setServerError(null);
+        setNameFieldInvalid(false);
         setResult(body as CreatedCharacter);
+      } else {
+        setServerError(body.message);
+        setNameFieldInvalid(body.field === "name");
       }
-      // non-2xx handling (server-error, aria-invalid): next backlog item.
     } catch {
-      // network-failure handling (server-error retry message): next backlog item.
+      setServerError("Could not reach the server. Please try again.");
+      setNameFieldInvalid(false);
     } finally {
       setSubmitting(false);
     }
@@ -152,6 +161,7 @@ export default function App() {
             type="text"
             value={name}
             onChange={(event) => setName(event.target.value)}
+            aria-invalid={nameFieldInvalid ? "true" : undefined}
           />
           {nameError && (
             <p className="error" data-testid="name-error" role="alert">
@@ -159,6 +169,12 @@ export default function App() {
             </p>
           )}
         </div>
+
+        {serverError && (
+          <p className="error" data-testid="server-error" role="alert">
+            {serverError}
+          </p>
+        )}
 
         <div className="field">
           <label htmlFor="field-vocation">Vocation</label>

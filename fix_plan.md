@@ -54,7 +54,7 @@ not a target to game.
       POST with the configured `accountId`, and the result panel showing the
       created character's stats with a "Create another" button. *[+5]*
 
-- [ ] **Frontend error handling** — render the server's `message`, mark the
+- [x] **Frontend error handling** — render the server's `message`, mark the
       name field `aria-invalid` when the error names it, keep what the player
       typed, and show a retry message when the network fails. *[+3]*
 
