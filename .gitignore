@@ -3,6 +3,7 @@ backend/target/
 frontend/dist/
 frontend/node_modules/
 frontend/.vitest-result.json
+frontend/tsconfig.tsbuildinfo
 
 # loop output
 .ralph/logs/

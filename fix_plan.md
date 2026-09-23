@@ -45,7 +45,7 @@ not a target to game.
       race must not surface as a 500), and 10 characters per account as 409
       `CHARACTER_LIMIT_REACHED`. *[+6]*
 
-- [ ] **Frontend scaffold** — `App.tsx` with the four controls and the
+- [x] **Frontend scaffold** — `App.tsx` with the four controls and the
       `data-testid` values from `specs/04-frontend.md`, loading vocations and
       towns on mount, defaulting to Sorcerer / male / Thais, every control
       labelled. *[+4]*
@@ -65,6 +65,16 @@ Append here instead of widening the current iteration.
 - Docker path is unverified: `db/docker-compose.yml` and the MySQL profile
   have never been run (Docker was not available when this was set up). The H2
   test path is verified. Someone should boot it once against real MySQL.
+
+- `npm run build` (`tsc -b && vite build`) fails independent of any app code:
+  `vite.config.ts`'s `test: {...}` block (the vitest config merged into the
+  vite config) does not type-check against `vite`'s `defineConfig` — TS2769,
+  "'test' does not exist in type 'UserConfigExport'". This predates the
+  frontend scaffold; it just had nothing to type-check before. `verify.py`
+  never calls `npm run build`, only `npx vitest run`, so it hasn't shown up in
+  score. Likely fix is importing `defineConfig` from `vitest/config` instead
+  of `vite` in `frontend/vite.config.ts`, but that file is a discovered-work
+  item, not something to fix inside another backlog item.
 
 ## Blocked
 
