@@ -13,7 +13,7 @@ not a target to game.
 
 ## Backlog
 
-- [ ] **Domain model** — `Vocation` (per-level health/mana/capacity gains and
+- [x] **Domain model** — `Vocation` (per-level health/mana/capacity gains and
       outfit), `Outfit`, `Sex`, and the experience-for-level formula, all per
       `specs/01-domain.md`. Start levels come from configuration, not
       constants. Unit-test the formula against level 1, 2 and 8. *[+0]*

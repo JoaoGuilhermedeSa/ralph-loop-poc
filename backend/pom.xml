@@ -70,6 +70,48 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+
+      <!-- The oracle (verify.py) counts every report under the default
+           surefire-reports directory and compares it to cases.json, so the
+           acceptance suite must be the only thing writing there. Unit tests
+           run in the same `mvn test` phase but report to a separate
+           directory. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <includes>
+                <include>**/acceptance/**/*Test.java</include>
+              </includes>
+              <!-- Acceptance failures are the normal state early in the
+                   backlog; verify.py reads the reports, not the exit code.
+                   Ignoring failures here lets the unit-tests execution
+                   below still run in the same `mvn test` invocation. -->
+              <testFailureIgnore>true</testFailureIgnore>
+            </configuration>
+          </execution>
+          <execution>
+            <id>unit-tests</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <includes>
+                <include>**/unit/**/*Test.java</include>
+              </includes>
+              <reportsDirectory>${project.build.directory}/unit-test-reports</reportsDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>
