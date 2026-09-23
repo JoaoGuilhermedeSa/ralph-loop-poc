@@ -2,9 +2,9 @@
 # The Ralph loop: feed one unchanging prompt to a fresh agent, over and over,
 # until the oracle goes green or the iteration budget runs out.
 #
-#   ./ralph.sh -n 12                     run it
-#   ./ralph.sh -n 12 -m claude-sonnet-5  pin the model
-#   ./ralph.sh --reset                   back to the empty start state
+#   ./ralph.sh -n 12                          run it
+#   ./ralph.sh -n 20 -m claude-sonnet-5 -b 5  pin the model, cap $5 per iteration
+#   ./ralph.sh --reset                        back to the empty start state
 #
 # Each iteration is slow here (the oracle boots Spring and runs vitest, ~1 min),
 # so budget accordingly and go and do something else.
@@ -13,6 +13,7 @@ cd "$(dirname "$0")"
 
 ITERATIONS=12
 MODEL=""
+MAX_BUDGET=""
 ASSUME_YES=0
 FORCE=0
 
@@ -20,6 +21,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
     -n|--iterations) ITERATIONS="$2"; shift 2 ;;
     -m|--model)      MODEL="$2"; shift 2 ;;
+    -b|--max-budget) MAX_BUDGET="$2"; shift 2 ;;
     -y|--yes)        ASSUME_YES=1; shift ;;
     -f|--force)      FORCE=1; shift ;;
     --reset)
@@ -48,6 +50,12 @@ check_oracle() {
     echo "Halting: the files Ralph may not edit have changed." >&2
     exit 1
   fi
+  # The lock records the hashes, so it must not move either: rewriting it
+  # after editing a test would otherwise pass the check above.
+  if ! git diff --quiet ralph-start -- .ralph/oracle.lock; then
+    echo "Halting: .ralph/oracle.lock differs from ralph-start." >&2
+    exit 1
+  fi
 }
 
 if [ "$ASSUME_YES" -eq 0 ]; then
@@ -64,18 +72,21 @@ PREVIOUS="$(read_field passed "$JSON")"
 TOTAL="$(read_field total "$JSON")"
 STALLS=0
 
-# Pin the model when asked, and say which one ran: a recording should show it.
-MODEL_ARGS=()
-[ -n "$MODEL" ] && MODEL_ARGS=(--model "$MODEL")
+# Pin the model and the spend when asked, and say what ran: a recording should show it.
+AGENT_ARGS=(-p --dangerously-skip-permissions --output-format json)
+[ -n "$MODEL" ] && AGENT_ARGS+=(--model "$MODEL")
+[ -n "$MAX_BUDGET" ] && AGENT_ARGS+=(--max-budget-usd "$MAX_BUDGET")
 MODEL_LABEL="${MODEL:-Claude Code default}"
+BUDGET_LABEL="${MAX_BUDGET:+\$$MAX_BUDGET per iteration}"
 RUN_CSV=".ralph/logs/run.csv"
-[ -f "$RUN_CSV" ] || echo "started,iteration,model,seconds,passed,total,backend,frontend,commit" > "$RUN_CSV"
+[ -f "$RUN_CSV" ] || echo "started,iteration,seconds,passed,total,backend,frontend,commit,models,cost_usd,turns,tokens_in,tokens_out,subagents,outcome" > "$RUN_CSV"
 RUN_STARTED="$(date +%Y-%m-%dT%H:%M:%S)"
 RUN_T0=$SECONDS
+TOTAL_COST=0
 
 echo
 echo "ralph: starting at $PREVIOUS/$TOTAL, budget $ITERATIONS iterations"
-echo "model: $MODEL_LABEL   ($(claude --version))"
+echo "model: $MODEL_LABEL, ${BUDGET_LABEL:-no spend cap}   ($(claude --version))"
 
 for i in $(seq 1 "$ITERATIONS"); do
   rule "iteration $i of $ITERATIONS"
@@ -85,8 +96,12 @@ for i in $(seq 1 "$ITERATIONS"); do
 
   # A fresh context window every iteration. The repo is the only memory.
   ITER_T0=$SECONDS
-  claude -p --dangerously-skip-permissions ${MODEL_ARGS[@]+"${MODEL_ARGS[@]}"} < PROMPT.md 2>&1 | tee "$LOG"
+  echo "  agent working since $(date +%H:%M:%S) ..."
+  claude "${AGENT_ARGS[@]}" < PROMPT.md > "$LOG" || true
   ELAPSED=$((SECONDS - ITER_T0))
+  python tools/iteration_report.py "$LOG"
+  AGENT="$(python tools/iteration_report.py "$LOG" --fields)"
+  TOTAL_COST="$(python -c "import sys;print(f'{float(sys.argv[1]) + float(sys.argv[2] or 0):.2f}')" "$TOTAL_COST" "$(cut -d, -f2 <<< "$AGENT")")"
 
   check_oracle
   JSON="$(score)"
@@ -98,7 +113,7 @@ for i in $(seq 1 "$ITERATIONS"); do
 
   printf '  score %s/%s (%+d)   backend %s   frontend %s   %dm%02ds\n' \
     "$PASSED" "$TOTAL" "$DELTA" "$BACKEND" "$FRONTEND" $((ELAPSED / 60)) $((ELAPSED % 60))
-  echo "$RUN_STARTED,$i,$MODEL_LABEL,$ELAPSED,$PASSED,$TOTAL,$BACKEND,$FRONTEND,$(git rev-parse --short HEAD)" >> "$RUN_CSV"
+  echo "$RUN_STARTED,$i,$ELAPSED,$PASSED,$TOTAL,$BACKEND,$FRONTEND,$(git rev-parse --short HEAD),$AGENT" >> "$RUN_CSV"
   [ "$DELTA" -lt 0 ] && echo "  regression; the next iteration must fix it before taking new work."
 
   if [ "$(git rev-parse HEAD)" = "$HEAD_BEFORE" ]; then
@@ -123,7 +138,8 @@ done
 
 rule "summary"
 WALL=$((SECONDS - RUN_T0))
-printf 'model %s, wall clock %02d:%02d:%02d\n' "$MODEL_LABEL" $((WALL / 3600)) $((WALL % 3600 / 60)) $((WALL % 60))
+printf 'model %s, wall clock %02d:%02d:%02d, agent cost $%s\n' "$MODEL_LABEL" \
+  $((WALL / 3600)) $((WALL % 3600 / 60)) $((WALL % 60)) "$TOTAL_COST"
 python verify.py || true
 echo
 git --no-pager log --oneline ralph-start..HEAD

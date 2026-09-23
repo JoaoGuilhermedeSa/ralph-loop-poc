@@ -47,7 +47,7 @@ iteration can otherwise burn the whole run.
 | `backend/src/test/java/ots/charcreate/unit/**` | `**/acceptance/**` |
 | `frontend/src/**` | `verify.py`, `tools/**` |
 | `frontend/tests/unit/**` | `AGENTS.md`, `PROMPT.md` |
-| `fix_plan.md`, `.ralph/journal.md` | |
+| `fix_plan.md`, `.ralph/journal.md` | `ralph.ps1`, `ralph.sh`, `.ralph/oracle.lock` |
 
 ## Style
 

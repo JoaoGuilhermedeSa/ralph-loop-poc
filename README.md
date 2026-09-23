@@ -8,12 +8,14 @@ companion repo **`ralph-loop`**. This one is where the technique meets work
 that actually has to ship.
 
     python verify.py        # 0/68 right now - nothing is implemented yet
-    ./ralph.sh -n 12        # or: .\ralph.ps1 -Iterations 12
+    ./ralph.sh -n 20 -m claude-sonnet-5 -b 5
+    # or: .\ralph.ps1 -Iterations 20 -Model claude-sonnet-5 -MaxBudgetUsd 5
 
 Then read what it did:
 
     git log --oneline ralph-start..HEAD
     cat .ralph/journal.md
+    cat .ralph/logs/run.csv     # per-iteration score, time, model, cost, tokens
 
 ## What gets built
 
@@ -51,7 +53,8 @@ that shows up immediately as an unsatisfiable case.
 | `fix_plan.md` | the backlog — **edit this to steer the run** | both |
 | `.ralph/journal.md` | one line per iteration, for its successor | agent |
 | `verify.py` | the oracle: runs both suites, prints one score | locked |
-| `tools/oracle_lock.py` | tripwire over the 16 files Ralph may not touch | locked |
+| `tools/iteration_report.py` | turns the agent's JSON output into the console summary and `run.csv` | locked |
+| `tools/oracle_lock.py` | tripwire over the 19 files Ralph may not touch | locked |
 | `backend/`, `frontend/` | where the agent actually writes | agent |
 
 `db/migration/V1__init.sql` is locked too. `spring.jpa.hibernate.ddl-auto` is
@@ -62,14 +65,38 @@ the context on startup rather than silently reshaping the database.
 
 - **Bounded budget** — `-n` / `-Iterations`, never `while true` unattended.
 - **Stall detector** — three iterations with no commit and the loop halts.
-- **Oracle tripwire** — the 16 protected files are hashed before and after
-  every iteration; any change halts the run.
+- **Oracle tripwire** — the 19 protected files (oracle, specs, schema,
+  prompt, house rules, the runners themselves) are hashed before and after
+  every iteration; any change halts the run. The lock file holding those
+  hashes must also match `ralph-start`, so re-recording it does not help.
+- **Spend cap** — `-MaxBudgetUsd` / `-b` passes `--max-budget-usd` to each
+  iteration. Off by default.
 - **Score guard** — the total may not fall; a regression becomes the next
   iteration's only job.
 - **Dirty-tree guard** — `--reset` refuses to discard uncommitted work.
 
 Smoke detectors, not a sandbox. The real backstop is one small commit per
 iteration that a human can read.
+
+## Recording a run
+
+The runner is built to be screen-recorded and sped up:
+
+- the header names the model (pass `-Model` / `-m` to pin it; otherwise it
+  says "Claude Code default") and the Claude Code version;
+- each iteration prints the agent's closing message, then one line with the
+  model(s) used, cost, turns, tokens and subagents, then the score and how
+  long the iteration took;
+- the summary gives total wall clock and total agent cost.
+
+The screen is quiet while the agent works: `claude -p` returns only when the
+iteration is over. The full JSON for each iteration stays in
+`.ralph/logs/iter-NN.log` until the next reset; `run.csv` survives resets and
+keeps one row per iteration of every run.
+
+Pin the model for anything you plan to show, so the slide and the log agree.
+Iterations take minutes each (the oracle alone boots Spring and runs vitest),
+so a run from 0/68 is measured in hours.
 
 ## Running it for real
 

@@ -6,8 +6,10 @@ exactly **one** unchecked item, ticks it, and stops.
 Priority is top-to-bottom. Reorder this file to steer the run — that is the
 intended way to change Ralph's mind, and it is cheaper than arguing with it.
 
-Scores in brackets are the rough acceptance gain to expect, out of 68. They are
-a sanity check for the human reading `git log`, not a target to game.
+Scores in brackets count the acceptance cases each item owns, out of 68 (56
+backend, 12 frontend). A few cases that expect success can already pass after an
+earlier item, so treat them as a sanity check for the human reading `git log`,
+not a target to game.
 
 ## Backlog
 
@@ -27,11 +29,11 @@ a sanity check for the human reading `git log`, not a target to game.
 - [ ] **Create a character, happy path** — `POST /api/characters` returning
       201 with every stat resolved: level, experience, health, mana, capacity,
       lookType, outfit colours and the town's spawn position. This is the bulk
-      of the score. *[+18]*
+      of the score. *[+16]*
 
 - [ ] **Name normalisation and rules** — trim, collapse internal whitespace,
       preserve case; then rules 1–6 of `specs/02-name-rules.md` **in the order
-      given**, each with its own error code. *[+16]*
+      given**, each with its own error code. *[+22]*
 
 - [ ] **The rest of the error table** — required fields, invalid vocation and
       sex, unknown account and town, and the cross-group validation order in
