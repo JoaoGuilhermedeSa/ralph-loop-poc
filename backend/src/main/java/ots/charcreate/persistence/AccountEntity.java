@@ -36,6 +36,14 @@ public class AccountEntity {
     protected AccountEntity() {
     }
 
+    public AccountEntity(Long id, String name, String passwordHash, String email, LocalDateTime createdAt) {
+        this.id = id;
+        this.name = name;
+        this.passwordHash = passwordHash;
+        this.email = email;
+        this.createdAt = createdAt;
+    }
+
     public Long getId() {
         return id;
     }

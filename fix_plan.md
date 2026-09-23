@@ -26,7 +26,7 @@ not a target to game.
 - [x] **Reference endpoints** — `GET /api/vocations` and `GET /api/towns` per
       `specs/03-api.md`, both ordered by id. *[+2]*
 
-- [ ] **Create a character, happy path** — `POST /api/characters` returning
+- [x] **Create a character, happy path** — `POST /api/characters` returning
       201 with every stat resolved: level, experience, health, mana, capacity,
       lookType, outfit colours and the town's spawn position. This is the bulk
       of the score. *[+16]*
