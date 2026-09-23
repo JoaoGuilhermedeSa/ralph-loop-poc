@@ -50,7 +50,7 @@ not a target to game.
       towns on mount, defaulting to Sorcerer / male / Thais, every control
       labelled. *[+4]*
 
-- [ ] **Frontend submit and result** — client-side mirror of the name rules,
+- [x] **Frontend submit and result** — client-side mirror of the name rules,
       POST with the configured `accountId`, and the result panel showing the
       created character's stats with a "Create another" button. *[+5]*
 

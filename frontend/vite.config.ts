@@ -8,6 +8,11 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./tests/setup.ts"],
-    include: ["tests/**/*.test.tsx"],
+    // Scoped to the acceptance suite only: verify.py runs plain `vitest run`
+    // (no path filter) and compares the resulting test count to
+    // tests/acceptance/expected.json, so any other *.test.tsx picked up by a
+    // wider glob here would trip its TAMPERED guard. Unit tests live under
+    // tests/unit/ and run via `vitest.unit.config.ts` instead.
+    include: ["tests/acceptance/**/*.test.tsx"],
   },
 });

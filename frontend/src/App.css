@@ -88,3 +88,26 @@ button[type="submit"]:disabled {
   background: #7a7156;
   cursor: not-allowed;
 }
+
+.error {
+  margin: 0;
+  color: #d47d37;
+  font-size: 0.85rem;
+}
+
+.stats {
+  font-family: "Consolas", "Courier New", monospace;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 1rem;
+  margin: 0 0 1.25rem;
+}
+
+.stats dt {
+  color: #c9c2a6;
+}
+
+.stats dd {
+  margin: 0;
+  text-align: right;
+}

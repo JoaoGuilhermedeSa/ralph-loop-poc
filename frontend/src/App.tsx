@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import "./App.css";
+import { normalizeName, validateName } from "./nameValidation";
 
 interface Vocation {
   id: number;
@@ -11,6 +12,20 @@ interface Town {
   name: string;
 }
 
+interface CreatedCharacter {
+  name: string;
+  vocationName: string;
+  townName: string;
+  level: number;
+  health: number;
+  healthMax: number;
+  mana: number;
+  manaMax: number;
+  capacity: number;
+}
+
+const ACCOUNT_ID = Number(import.meta.env.VITE_ACCOUNT_ID ?? "1");
+
 export default function App() {
   const [vocations, setVocations] = useState<Vocation[]>([]);
   const [towns, setTowns] = useState<Town[]>([]);
@@ -20,6 +35,10 @@ export default function App() {
   const [vocation, setVocation] = useState(1);
   const [sex, setSex] = useState(1);
   const [townId, setTownId] = useState(1);
+
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [result, setResult] = useState<CreatedCharacter | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -45,8 +64,79 @@ export default function App() {
     };
   }, []);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function resetForm() {
+    setResult(null);
+    setName("");
+    setVocation(1);
+    setSex(1);
+    setTownId(1);
+    setNameError(null);
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const error = validateName(name);
+    if (error) {
+      setNameError(error);
+      return;
+    }
+    setNameError(null);
+
+    setSubmitting(true);
+    try {
+      const response = await fetch("/api/characters", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          accountId: ACCOUNT_ID,
+          name: normalizeName(name),
+          vocation,
+          sex,
+          townId,
+        }),
+      });
+      const body = await response.json();
+      if (response.ok) {
+        setResult(body as CreatedCharacter);
+      }
+      // non-2xx handling (server-error, aria-invalid): next backlog item.
+    } catch {
+      // network-failure handling (server-error retry message): next backlog item.
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (result) {
+    return (
+      <div className="page">
+        <div className="card" data-testid="result">
+          <h1>{result.name}</h1>
+          <dl className="stats">
+            <dt>Vocation</dt>
+            <dd>{result.vocationName}</dd>
+            <dt>Town</dt>
+            <dd>{result.townName}</dd>
+            <dt>Level</dt>
+            <dd>{result.level}</dd>
+            <dt>Health</dt>
+            <dd>
+              {result.health} / {result.healthMax}
+            </dd>
+            <dt>Mana</dt>
+            <dd>
+              {result.mana} / {result.manaMax}
+            </dd>
+            <dt>Capacity</dt>
+            <dd>{result.capacity}</dd>
+          </dl>
+          <button type="button" data-testid="create-another" onClick={resetForm}>
+            Create another
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -63,6 +153,11 @@ export default function App() {
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
+          {nameError && (
+            <p className="error" data-testid="name-error" role="alert">
+              {nameError}
+            </p>
+          )}
         </div>
 
         <div className="field">
@@ -123,8 +218,8 @@ export default function App() {
           </select>
         </div>
 
-        <button type="submit" data-testid="submit" disabled={loadingReferenceData}>
-          Create character
+        <button type="submit" data-testid="submit" disabled={loadingReferenceData || submitting}>
+          {submitting ? "Creating…" : "Create character"}
         </button>
       </form>
     </div>
