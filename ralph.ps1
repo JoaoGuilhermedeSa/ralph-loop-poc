@@ -5,11 +5,13 @@
 
 .EXAMPLE
   .\ralph.ps1 -Iterations 12
+  .\ralph.ps1 -Iterations 12 -Model claude-sonnet-5
   .\ralph.ps1 -Reset
 #>
 [CmdletBinding()]
 param(
     [int]$Iterations = 12,
+    [string]$Model = '',
     [switch]$Reset,
     [switch]$Yes,
     [switch]$Force
@@ -66,8 +68,19 @@ $start = Get-Score
 $previous = $start.passed
 $stalls = 0
 
+# Pin the model when asked, and say which one ran: a recording should show it.
+$modelArgs = @()
+if ($Model) { $modelArgs = @('--model', $Model) }
+$modelLabel = if ($Model) { $Model } else { 'Claude Code default' }
+$runCsv = Join-Path $logDir 'run.csv'
+if (-not (Test-Path $runCsv)) {
+    'started,iteration,model,seconds,passed,total,backend,frontend,commit' | Set-Content -Encoding utf8 $runCsv
+}
+$runStarted = Get-Date
+
 Write-Host ''
 Write-Host "ralph: starting at $($start.passed)/$($start.total), budget $Iterations iterations"
+Write-Host "model: $modelLabel   ($(& claude --version))"
 
 for ($i = 1; $i -le $Iterations; $i++) {
     Write-Rule "iteration $i of $Iterations"
@@ -76,7 +89,9 @@ for ($i = 1; $i -le $Iterations; $i++) {
     $log = Join-Path $logDir ("iter-{0:d2}.log" -f $i)
 
     # A fresh context window every iteration. The repo is the only memory.
-    $prompt | & claude -p --dangerously-skip-permissions 2>&1 | Tee-Object -FilePath $log
+    $iterStarted = Get-Date
+    $prompt | & claude -p --dangerously-skip-permissions @modelArgs 2>&1 | Tee-Object -FilePath $log
+    $seconds = [int]((Get-Date) - $iterStarted).TotalSeconds
 
     Test-Oracle
     $score = Get-Score
@@ -87,9 +102,13 @@ for ($i = 1; $i -le $Iterations; $i++) {
     if ($delta -lt 0) { $colour = 'Red' }
     $sign = ''
     if ($delta -ge 0) { $sign = '+' }
-    Write-Host ("  score {0}/{1} ({2}{3})   backend {4}   frontend {5}" -f `
+    Write-Host ("  score {0}/{1} ({2}{3})   backend {4}   frontend {5}   {6}m{7:d2}s" -f `
             $score.passed, $score.total, $sign, $delta,
-        $score.backend_passed, $score.frontend_passed) -ForegroundColor $colour
+        $score.backend_passed, $score.frontend_passed,
+        [int][math]::Floor($seconds / 60), ($seconds % 60)) -ForegroundColor $colour
+    ('{0:s},{1},{2},{3},{4},{5},{6},{7},{8}' -f $runStarted, $i, $modelLabel, $seconds,
+        $score.passed, $score.total, $score.backend_passed, $score.frontend_passed,
+        (git rev-parse --short HEAD)) | Add-Content -Encoding utf8 $runCsv
 
     if ($delta -lt 0) {
         Write-Host '  regression; the next iteration must fix it before taking new work.' -ForegroundColor Red
@@ -117,6 +136,7 @@ for ($i = 1; $i -le $Iterations; $i++) {
 }
 
 Write-Rule 'summary'
+Write-Host ("model {0}, wall clock {1:hh\:mm\:ss}" -f $modelLabel, ((Get-Date) - $runStarted))
 & python verify.py
 Write-Host ''
 git --no-pager log --oneline ralph-start..HEAD
