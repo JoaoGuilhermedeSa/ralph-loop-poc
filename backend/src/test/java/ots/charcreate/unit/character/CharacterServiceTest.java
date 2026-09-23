@@ -13,13 +13,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import ots.charcreate.api.CharacterResponse;
 import ots.charcreate.api.CreateCharacterRequest;
+import ots.charcreate.character.CharacterLimitReachedException;
 import ots.charcreate.character.CharacterService;
 import ots.charcreate.character.FieldRequiredException;
 import ots.charcreate.character.InvalidSexException;
 import ots.charcreate.character.InvalidVocationException;
+import ots.charcreate.character.NameTakenException;
 import ots.charcreate.character.NameTooShortException;
 import ots.charcreate.character.UnknownAccountException;
 import ots.charcreate.character.UnknownTownException;
@@ -174,6 +177,26 @@ class CharacterServiceTest {
     void nameRulesAreCheckedBeforeVocation() {
         assertThrows(NameTooShortException.class,
                 () -> service.create(new CreateCharacterRequest(1L, "Ab", 9, 9, 1)));
+    }
+
+    @Test
+    void characterLimitIsRejectedAtTenExistingCharacters() {
+        when(accounts.findById(1L)).thenReturn(Optional.of(account(1L)));
+        when(towns.findById(1)).thenReturn(Optional.of(new TownEntity(1, "Thais", 32369, 32241, 7)));
+        when(players.countByAccountId(1L)).thenReturn(10L);
+
+        assertThrows(CharacterLimitReachedException.class,
+                () -> service.create(new CreateCharacterRequest(1L, "Bubble", 1, 1, 1)));
+    }
+
+    @Test
+    void nameTakenMapsTheUniqueConstraintViolationInsteadOfSurfacingIt() {
+        when(accounts.findById(1L)).thenReturn(Optional.of(account(1L)));
+        when(towns.findById(1)).thenReturn(Optional.of(new TownEntity(1, "Thais", 32369, 32241, 7)));
+        when(players.save(any())).thenThrow(new DataIntegrityViolationException("uq_players_name_key"));
+
+        assertThrows(NameTakenException.class,
+                () -> service.create(new CreateCharacterRequest(1L, "Bubble", 1, 1, 1)));
     }
 
     private static AccountEntity account(Long id) {

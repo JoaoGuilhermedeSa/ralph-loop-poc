@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +22,13 @@ import ots.charcreate.persistence.TownRepository;
 
 /**
  * Resolves a character's starting stats and persists it, per
- * {@code specs/01-domain.md} and {@code specs/03-api.md}. Name uniqueness
- * (the database-level {@code NAME_TAKEN} check) is not implemented yet - see
- * {@code fix_plan.md}.
+ * {@code specs/01-domain.md} and {@code specs/03-api.md}.
  */
 @Service
 public class CharacterService {
+
+    // Per specs/03-api.md.
+    private static final int MAX_CHARACTERS_PER_ACCOUNT = 10;
 
     // Fixed for every new character, per specs/01-domain.md.
     private static final int OUTFIT_LOOK_HEAD = 78;
@@ -68,6 +70,10 @@ public class CharacterService {
         TownEntity town = towns.findById(request.townId())
                 .orElseThrow(() -> new UnknownTownException(request.townId()));
 
+        if (players.countByAccountId(account.getId()) >= MAX_CHARACTERS_PER_ACCOUNT) {
+            throw new CharacterLimitReachedException(account.getId());
+        }
+
         int level = vocation == Vocation.NONE ? noneStartLevel : defaultStartLevel;
         long experience = Experience.forLevel(level);
         int health = vocation.healthAtLevel(level);
@@ -81,7 +87,11 @@ public class CharacterService {
                 town.getId(), level, experience, health, health, mana, mana, capacity, lookType, OUTFIT_LOOK_HEAD,
                 OUTFIT_LOOK_BODY, OUTFIT_LOOK_LEGS, OUTFIT_LOOK_FEET, town.getPosX(), town.getPosY(), town.getPosZ(),
                 LocalDateTime.now());
-        player = players.save(player);
+        try {
+            player = players.save(player);
+        } catch (DataIntegrityViolationException e) {
+            throw new NameTakenException(name);
+        }
 
         return new CharacterResponse(player.getId(), player.getAccountId(), player.getName(), vocation.id(),
                 vocation.displayName(), sex.id(), town.getId(), town.getName(), level, experience, health, health,

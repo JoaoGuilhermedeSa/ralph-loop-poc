@@ -40,7 +40,7 @@ not a target to game.
       `specs/03-api.md`. One error shape, no Spring default bodies, no 500s
       for input the API is meant to reject. *[+10]*
 
-- [ ] **Uniqueness and the character limit** — case-insensitive `name_key`
+- [x] **Uniqueness and the character limit** — case-insensitive `name_key`
       collisions as 409 `NAME_TAKEN` (catch the constraint violation; a lost
       race must not surface as a 500), and 10 characters per account as 409
       `CHARACTER_LIMIT_REACHED`. *[+6]*

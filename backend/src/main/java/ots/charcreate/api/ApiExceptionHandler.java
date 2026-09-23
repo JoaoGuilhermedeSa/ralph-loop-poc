@@ -10,8 +10,7 @@ import ots.charcreate.character.NameValidationException;
 
 /**
  * Translates domain exceptions into the error body shape {@code specs/03-api.md}
- * requires, instead of Spring's default error body. {@code NAME_TAKEN} and
- * {@code CHARACTER_LIMIT_REACHED} are not wired up yet - see {@code fix_plan.md}.
+ * requires, instead of Spring's default error body.
  */
 @RestControllerAdvice
 public class ApiExceptionHandler {
