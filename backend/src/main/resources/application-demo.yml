@@ -1,0 +1,15 @@
+# Demo profile: in-memory H2 plus one seeded account, so the page works with no
+# database server. H2 is a test-scope dependency, so run it with the test
+# classpath - demo.ps1 does:
+#   mvn spring-boot:run -Dspring-boot.run.useTestClasspath=true -Dspring-boot.run.profiles=demo
+spring:
+  datasource:
+    url: jdbc:h2:mem:charcreate;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  flyway:
+    locations: classpath:db/migration,classpath:db/demo
+
+server:
+  port: ${DEMO_BACKEND_PORT:8081}

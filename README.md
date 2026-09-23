@@ -106,6 +106,38 @@ Pin the model for anything you plan to show, so the slide and the log agree.
 Iterations take minutes each (the oracle alone boots Spring and runs vitest),
 so a run from 0/68 is measured in hours.
 
+## Demo branch: see what the loop built
+
+This `demo` branch starts at `run-2026-09-23`, the last commit of the recorded
+run, and adds one human commit on top. The app code the agent wrote
+(`backend/src/main/java`, `frontend/src`) is not changed.
+
+    powershell -ExecutionPolicy Bypass -File .\demo.ps1
+
+That starts the backend on in-memory H2 with a seeded demo account, then the
+page on http://localhost:5173, and opens the browser. Ctrl+C stops both. The
+backend logs to `backend\target\demo-backend.log`. Use `-BackendPort` if 8081
+is taken (the default avoids 8080, which other software often holds), and
+`-NoBrowser` to skip opening the browser.
+
+`-ExecutionPolicy Bypass` applies to that one process only. Windows blocks
+`.ps1` scripts by default; the same form works for `ralph.ps1`.
+
+What the human commit changes, and why:
+
+- **The production build.** `npm run build` failed on the start-state
+  `vite.config.ts` (TS2769: vitest 2 bundles its own vite, and the `test`
+  block did not type-check against vite 6). The oracle never ran the build,
+  so the loop finished green without noticing. The test setup now lives in
+  `vitest.config.ts`, outside tsconfig, and the build passes. This was a
+  harness bug, not the agent's; branch `harness-v2` fixes it for future runs.
+- **A way to run it without MySQL.** `application-demo.yml` (profile `demo`)
+  uses H2 and seeds account 1 from `db/demo/`, because the schema seeds towns
+  but no accounts. The dev proxy target comes from `API_URL`.
+
+Still true after this commit: `python verify.py` is 68/68 GREEN, the 49
+backend and 14 frontend unit tests pass, and the oracle files are untouched.
+
 ## Running it for real
 
     # database (optional - the tests use H2)
