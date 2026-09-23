@@ -52,6 +52,14 @@ public class CharacterService {
 
     @Transactional
     public CharacterResponse create(CreateCharacterRequest request) {
+        requireField(request.accountId(), "accountId");
+        requireField(request.name(), "name");
+        requireField(request.vocation(), "vocation");
+        requireField(request.sex(), "sex");
+        requireField(request.townId(), "townId");
+
+        String name = NameValidator.normalizeAndValidate(request.name());
+
         Vocation vocation = Vocation.byId(request.vocation())
                 .orElseThrow(() -> new InvalidVocationException(request.vocation()));
         Sex sex = Sex.byId(request.sex()).orElseThrow(() -> new InvalidSexException(request.sex()));
@@ -67,7 +75,6 @@ public class CharacterService {
         int capacity = vocation.capacityAtLevel(level);
         int lookType = vocation.lookType(sex);
 
-        String name = NameValidator.normalizeAndValidate(request.name());
         String nameKey = name.toLowerCase(Locale.ROOT);
 
         PlayerEntity player = new PlayerEntity(account.getId(), name, nameKey, vocation.id(), sex.id(),
@@ -80,5 +87,11 @@ public class CharacterService {
                 vocation.displayName(), sex.id(), town.getId(), town.getName(), level, experience, health, health,
                 mana, mana, capacity, lookType, OUTFIT_LOOK_HEAD, OUTFIT_LOOK_BODY, OUTFIT_LOOK_LEGS,
                 OUTFIT_LOOK_FEET, town.getPosX(), town.getPosY(), town.getPosZ());
+    }
+
+    private static void requireField(Object value, String field) {
+        if (value == null) {
+            throw new FieldRequiredException(field);
+        }
     }
 }

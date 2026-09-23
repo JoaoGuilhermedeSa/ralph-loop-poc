@@ -35,7 +35,7 @@ not a target to game.
       preserve case; then rules 1–6 of `specs/02-name-rules.md` **in the order
       given**, each with its own error code. *[+22]*
 
-- [ ] **The rest of the error table** — required fields, invalid vocation and
+- [x] **The rest of the error table** — required fields, invalid vocation and
       sex, unknown account and town, and the cross-group validation order in
       `specs/03-api.md`. One error shape, no Spring default bodies, no 500s
       for input the API is meant to reject. *[+10]*

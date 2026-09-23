@@ -17,8 +17,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ots.charcreate.api.CharacterResponse;
 import ots.charcreate.api.CreateCharacterRequest;
 import ots.charcreate.character.CharacterService;
+import ots.charcreate.character.FieldRequiredException;
 import ots.charcreate.character.InvalidSexException;
 import ots.charcreate.character.InvalidVocationException;
+import ots.charcreate.character.NameTooShortException;
 import ots.charcreate.character.UnknownAccountException;
 import ots.charcreate.character.UnknownTownException;
 import ots.charcreate.persistence.AccountEntity;
@@ -131,6 +133,47 @@ class CharacterServiceTest {
     void invalidSexIsRejected() {
         assertThrows(InvalidSexException.class,
                 () -> service.create(new CreateCharacterRequest(1L, "Bubble", 1, 9, 1)));
+    }
+
+    @Test
+    void missingAccountIdIsRejected() {
+        FieldRequiredException ex = assertThrows(FieldRequiredException.class,
+                () -> service.create(new CreateCharacterRequest(null, "Bubble", 1, 1, 1)));
+        assertEquals("accountId", ex.field());
+    }
+
+    @Test
+    void missingNameIsRejected() {
+        FieldRequiredException ex = assertThrows(FieldRequiredException.class,
+                () -> service.create(new CreateCharacterRequest(1L, null, 1, 1, 1)));
+        assertEquals("name", ex.field());
+    }
+
+    @Test
+    void missingVocationIsRejected() {
+        FieldRequiredException ex = assertThrows(FieldRequiredException.class,
+                () -> service.create(new CreateCharacterRequest(1L, "Bubble", null, 1, 1)));
+        assertEquals("vocation", ex.field());
+    }
+
+    @Test
+    void missingSexIsRejected() {
+        FieldRequiredException ex = assertThrows(FieldRequiredException.class,
+                () -> service.create(new CreateCharacterRequest(1L, "Bubble", 1, null, 1)));
+        assertEquals("sex", ex.field());
+    }
+
+    @Test
+    void missingTownIdIsRejected() {
+        FieldRequiredException ex = assertThrows(FieldRequiredException.class,
+                () -> service.create(new CreateCharacterRequest(1L, "Bubble", 1, 1, null)));
+        assertEquals("townId", ex.field());
+    }
+
+    @Test
+    void nameRulesAreCheckedBeforeVocation() {
+        assertThrows(NameTooShortException.class,
+                () -> service.create(new CreateCharacterRequest(1L, "Ab", 9, 9, 1)));
     }
 
     private static AccountEntity account(Long id) {
