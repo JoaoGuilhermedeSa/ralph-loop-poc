@@ -8,14 +8,14 @@ companion repo **`ralph-loop`**. This one is where the technique meets work
 that actually has to ship.
 
     python verify.py        # 0/68 right now - nothing is implemented yet
-    ./ralph.sh -n 20 -m claude-sonnet-5 -b 5
-    # or: .\ralph.ps1 -Iterations 20 -Model claude-sonnet-5 -MaxBudgetUsd 5
+    ./ralph.sh -n 20 -m claude-sonnet-5
+    # or: .\ralph.ps1 -Iterations 20 -Model claude-sonnet-5
 
 Then read what it did:
 
     git log --oneline ralph-start..HEAD
     cat .ralph/journal.md
-    cat .ralph/logs/run.csv     # per-iteration score, time, model, cost, tokens
+    cat .ralph/logs/run.csv     # per-iteration score, time, model, tokens, est. cost
 
 ## What gets built
 
@@ -69,8 +69,12 @@ the context on startup rather than silently reshaping the database.
   prompt, house rules, the runners themselves) are hashed before and after
   every iteration; any change halts the run. The lock file holding those
   hashes must also match `ralph-start`, so re-recording it does not help.
-- **Spend cap** — `-MaxBudgetUsd` / `-b` passes `--max-budget-usd` to each
-  iteration. Off by default.
+- **Spend cap, API keys only** — `-MaxBudgetUsd` / `-b` passes
+  `--max-budget-usd` to each iteration. Off by default, and usually left off:
+  `claude -p` normally runs on your Claude Code login, where nothing is billed
+  per token and the subscription's usage limits are the real ceiling. The cap
+  then only cuts an iteration short, often mid-edit and uncommitted, which
+  hands the next iteration a dirty tree.
 - **Score guard** — the total may not fall; a regression becomes the next
   iteration's only job.
 - **Dirty-tree guard** — `--reset` refuses to discard uncommitted work.
@@ -85,9 +89,13 @@ The runner is built to be screen-recorded and sped up:
 - the header names the model (pass `-Model` / `-m` to pin it; otherwise it
   says "Claude Code default") and the Claude Code version;
 - each iteration prints the agent's closing message, then one line with the
-  model(s) used, cost, turns, tokens and subagents, then the score and how
+  model(s) used, estimated cost, turns, tokens and subagents, then the score and how
   long the iteration took;
-- the summary gives total wall clock and total agent cost.
+- the summary gives total wall clock and total estimated cost.
+
+The cost is Claude Code's estimate at **API list price**, not what you paid.
+On a subscription, label it that way on any slide ("≈ $X at API prices"), or
+show tokens and turns instead.
 
 The screen is quiet while the agent works: `claude -p` returns only when the
 iteration is over. The full JSON for each iteration stays in

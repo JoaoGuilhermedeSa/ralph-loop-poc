@@ -2,10 +2,14 @@
 """Summarise one iteration from the agent's `--output-format json` log.
 
 The loop runner calls this after every iteration, so the console shows what
-the agent said and `.ralph/logs/run.csv` records what it cost.
+the agent said and `.ralph/logs/run.csv` records how much work it took.
+
+Cost is Claude Code's own estimate at API list price (`costBasis: list`).
+Under a Claude subscription nothing is billed per token, so read it as "what
+this would cost on the API", not as money spent.
 
     python tools/iteration_report.py LOG            the agent's final message + one stats line
-    python tools/iteration_report.py LOG --fields   models,cost_usd,turns,tokens_in,tokens_out,subagents,outcome
+    python tools/iteration_report.py LOG --fields   models,est_cost_usd,turns,tokens_in,tokens_out,subagents,outcome
 
 A log that is not JSON (the CLI crashed, or was killed) is printed as-is and
 reported with empty fields and outcome `no-json`, so the loop keeps going and
@@ -36,7 +40,7 @@ def fields(data: dict) -> dict[str, str]:
     return {
         # ';' keeps the CSV to one column when subagents ran on another model.
         "models": ";".join(usage) or "unknown",
-        "cost_usd": f"{data.get('total_cost_usd', 0):.2f}",
+        "est_cost_usd": f"{data.get('total_cost_usd', 0):.2f}",
         "turns": str(data.get("num_turns", "")),
         "tokens_in": str(tokens_in),
         "tokens_out": str(tokens_out),
@@ -66,7 +70,7 @@ def main() -> int:
     print(str(data.get("result", "")).rstrip())
     f = fields(data)
     print(
-        f"  agent: {f['models']}   ${f['cost_usd']}   {f['turns']} turns   "
+        f"  agent: {f['models']}   ~${f['est_cost_usd']} at API list price   {f['turns']} turns   "
         f"{int(f['tokens_in']):,} tokens in / {int(f['tokens_out']):,} out   "
         f"{f['subagents']} subagents   {f['outcome']}"
     )

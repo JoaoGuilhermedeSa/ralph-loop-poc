@@ -3,7 +3,8 @@
 # until the oracle goes green or the iteration budget runs out.
 #
 #   ./ralph.sh -n 12                          run it
-#   ./ralph.sh -n 20 -m claude-sonnet-5 -b 5  pin the model, cap $5 per iteration
+#   ./ralph.sh -n 20 -m claude-sonnet-5       pin the model
+#   ./ralph.sh -n 20 -b 5                     cap each iteration (API-key runs only; see README)
 #   ./ralph.sh --reset                        back to the empty start state
 #
 # Each iteration is slow here (the oracle boots Spring and runs vitest, ~1 min),
@@ -77,16 +78,18 @@ AGENT_ARGS=(-p --dangerously-skip-permissions --output-format json)
 [ -n "$MODEL" ] && AGENT_ARGS+=(--model "$MODEL")
 [ -n "$MAX_BUDGET" ] && AGENT_ARGS+=(--max-budget-usd "$MAX_BUDGET")
 MODEL_LABEL="${MODEL:-Claude Code default}"
-BUDGET_LABEL="${MAX_BUDGET:+\$$MAX_BUDGET per iteration}"
+# The cap applies to Claude Code's list-price estimate. It limits real spend only
+# when claude is billed through an API key; on a subscription it is just a brake.
+BUDGET_LABEL="${MAX_BUDGET:+, cap \$$MAX_BUDGET (list price) per iteration}"
 RUN_CSV=".ralph/logs/run.csv"
-[ -f "$RUN_CSV" ] || echo "started,iteration,seconds,passed,total,backend,frontend,commit,models,cost_usd,turns,tokens_in,tokens_out,subagents,outcome" > "$RUN_CSV"
+[ -f "$RUN_CSV" ] || echo "started,iteration,seconds,passed,total,backend,frontend,commit,models,est_cost_usd,turns,tokens_in,tokens_out,subagents,outcome" > "$RUN_CSV"
 RUN_STARTED="$(date +%Y-%m-%dT%H:%M:%S)"
 RUN_T0=$SECONDS
 TOTAL_COST=0
 
 echo
 echo "ralph: starting at $PREVIOUS/$TOTAL, budget $ITERATIONS iterations"
-echo "model: $MODEL_LABEL, ${BUDGET_LABEL:-no spend cap}   ($(claude --version))"
+echo "model: $MODEL_LABEL$BUDGET_LABEL   ($(claude --version))"
 
 for i in $(seq 1 "$ITERATIONS"); do
   rule "iteration $i of $ITERATIONS"
@@ -138,7 +141,7 @@ done
 
 rule "summary"
 WALL=$((SECONDS - RUN_T0))
-printf 'model %s, wall clock %02d:%02d:%02d, agent cost $%s\n' "$MODEL_LABEL" \
+printf 'model %s, wall clock %02d:%02d:%02d, est. $%s at API list price\n' "$MODEL_LABEL" \
   $((WALL / 3600)) $((WALL % 3600 / 60)) $((WALL % 60)) "$TOTAL_COST"
 python verify.py || true
 echo

@@ -5,7 +5,8 @@
 
 .EXAMPLE
   .\ralph.ps1 -Iterations 12
-  .\ralph.ps1 -Iterations 20 -Model claude-sonnet-5 -MaxBudgetUsd 5
+  .\ralph.ps1 -Iterations 20 -Model claude-sonnet-5
+  .\ralph.ps1 -Iterations 20 -MaxBudgetUsd 5    # API-key runs only; see README
   .\ralph.ps1 -Reset
 #>
 [CmdletBinding()]
@@ -83,10 +84,12 @@ $agentArgs = @('-p', '--dangerously-skip-permissions', '--output-format', 'json'
 if ($Model) { $agentArgs += @('--model', $Model) }
 if ($MaxBudgetUsd -gt 0) { $agentArgs += @('--max-budget-usd', $MaxBudgetUsd.ToString([Globalization.CultureInfo]::InvariantCulture)) }
 $modelLabel = if ($Model) { $Model } else { 'Claude Code default' }
-$budgetLabel = if ($MaxBudgetUsd -gt 0) { '${0:0.00} per iteration' -f $MaxBudgetUsd } else { 'no spend cap' }
+# The cap applies to Claude Code's list-price estimate. It limits real spend only
+# when claude is billed through an API key; on a subscription it is just a brake.
+$budgetLabel = if ($MaxBudgetUsd -gt 0) { ', cap ${0:0.00} (list price) per iteration' -f $MaxBudgetUsd } else { '' }
 $runCsv = Join-Path $logDir 'run.csv'
 if (-not (Test-Path $runCsv)) {
-    'started,iteration,seconds,passed,total,backend,frontend,commit,models,cost_usd,turns,tokens_in,tokens_out,subagents,outcome' |
+    'started,iteration,seconds,passed,total,backend,frontend,commit,models,est_cost_usd,turns,tokens_in,tokens_out,subagents,outcome' |
         Set-Content -Encoding utf8 $runCsv
 }
 $runStarted = Get-Date
@@ -94,7 +97,7 @@ $totalCost = 0.0
 
 Write-Host ''
 Write-Host "ralph: starting at $($start.passed)/$($start.total), budget $Iterations iterations"
-Write-Host "model: $modelLabel, $budgetLabel   ($(& claude --version))"
+Write-Host "model: $modelLabel$budgetLabel   ($(& claude --version))"
 
 for ($i = 1; $i -le $Iterations; $i++) {
     Write-Rule "iteration $i of $Iterations"
@@ -158,7 +161,7 @@ for ($i = 1; $i -le $Iterations; $i++) {
 }
 
 Write-Rule 'summary'
-Write-Host ("model {0}, wall clock {1:hh\:mm\:ss}, agent cost `${2:0.00}" -f `
+Write-Host ("model {0}, wall clock {1:hh\:mm\:ss}, est. `${2:0.00} at API list price" -f `
         $modelLabel, ((Get-Date) - $runStarted), $totalCost)
 & python verify.py
 Write-Host ''
