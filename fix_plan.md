@@ -31,7 +31,7 @@ not a target to game.
       lookType, outfit colours and the town's spawn position. This is the bulk
       of the score. *[+16]*
 
-- [ ] **Name normalisation and rules** — trim, collapse internal whitespace,
+- [x] **Name normalisation and rules** — trim, collapse internal whitespace,
       preserve case; then rules 1–6 of `specs/02-name-rules.md` **in the order
       given**, each with its own error code. *[+22]*
 

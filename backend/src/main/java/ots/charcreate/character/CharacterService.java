@@ -21,8 +21,8 @@ import ots.charcreate.persistence.TownRepository;
 
 /**
  * Resolves a character's starting stats and persists it, per
- * {@code specs/01-domain.md} and {@code specs/03-api.md}. Name normalisation,
- * validation and uniqueness handling are not implemented yet - see
+ * {@code specs/01-domain.md} and {@code specs/03-api.md}. Name uniqueness
+ * (the database-level {@code NAME_TAKEN} check) is not implemented yet - see
  * {@code fix_plan.md}.
  */
 @Service
@@ -67,8 +67,8 @@ public class CharacterService {
         int capacity = vocation.capacityAtLevel(level);
         int lookType = vocation.lookType(sex);
 
-        String name = request.name();
-        String nameKey = name.trim().toLowerCase(Locale.ROOT);
+        String name = NameValidator.normalizeAndValidate(request.name());
+        String nameKey = name.toLowerCase(Locale.ROOT);
 
         PlayerEntity player = new PlayerEntity(account.getId(), name, nameKey, vocation.id(), sex.id(),
                 town.getId(), level, experience, health, health, mana, mana, capacity, lookType, OUTFIT_LOOK_HEAD,
