@@ -32,6 +32,14 @@ public class TownEntity {
     protected TownEntity() {
     }
 
+    public TownEntity(Integer id, String name, int posX, int posY, int posZ) {
+        this.id = id;
+        this.name = name;
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
+    }
+
     public Integer getId() {
         return id;
     }

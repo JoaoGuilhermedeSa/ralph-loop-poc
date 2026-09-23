@@ -23,7 +23,7 @@ not a target to game.
       means the context fails to start if a column is wrong; getting it to
       start is the deliverable. Map column names explicitly. *[+0]*
 
-- [ ] **Reference endpoints** — `GET /api/vocations` and `GET /api/towns` per
+- [x] **Reference endpoints** — `GET /api/vocations` and `GET /api/towns` per
       `specs/03-api.md`, both ordered by id. *[+2]*
 
 - [ ] **Create a character, happy path** — `POST /api/characters` returning
