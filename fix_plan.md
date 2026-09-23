@@ -18,7 +18,7 @@ not a target to game.
       `specs/01-domain.md`. Start levels come from configuration, not
       constants. Unit-test the formula against level 1, 2 and 8. *[+0]*
 
-- [ ] **Persistence** — JPA entities and repositories for `players`, `towns`
+- [x] **Persistence** — JPA entities and repositories for `players`, `towns`
       and `accounts` matching `V1__init.sql` exactly. `ddl-auto: validate`
       means the context fails to start if a column is wrong; getting it to
       start is the deliverable. Map column names explicitly. *[+0]*
