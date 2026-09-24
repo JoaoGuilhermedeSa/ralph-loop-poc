@@ -19,9 +19,6 @@ memory. Anything you want your successor to know, you must write down.
 5. Run `python verify.py` — the oracle. It tells you the real state of the
    world, not what the backlog claims.
 
-Use subagents to read and search. Context is your scarcest resource; spend it
-writing code, not grepping.
-
 ## 2. Pick exactly ONE thing
 
 The **single highest-priority unchecked item** in `fix_plan.md`.

@@ -3,10 +3,6 @@
 A real feature, built the way the talk describes: a spec, an oracle the agent
 cannot edit, a backlog, and a `while` loop.
 
-The talk itself, and a 30-second toy version of the same harness, live in the
-companion repo **`ralph-loop`**. This one is where the technique meets work
-that actually has to ship.
-
     python verify.py        # 0/68 right now - nothing is implemented yet
     ./ralph.sh -n 20 -m claude-sonnet-5
     # or: .\ralph.ps1 -Iterations 20 -Model claude-sonnet-5
